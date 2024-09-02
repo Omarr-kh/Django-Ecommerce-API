@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
-from django_filters import NumberFilter
+from django_filters import NumberFilter, FilterSet
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -15,7 +15,7 @@ from .serializers import ProductSerializer, OrderSerializer
 from .permissions import IsOwner
 
 
-class ProductFilter(django_filters.FilterSet):
+class ProductFilter(FilterSet):
     price__gte = NumberFilter(field_name="price", lookup_expr="gte")
     price__lte = NumberFilter(field_name="price", lookup_expr="lte")
 
