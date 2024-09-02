@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import NumberFilter
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -12,6 +13,15 @@ from rest_framework.exceptions import ValidationError
 from .models import Product, Order
 from .serializers import ProductSerializer, OrderSerializer
 from .permissions import IsOwner
+
+
+class ProductFilter(django_filters.FilterSet):
+    price__gte = NumberFilter(field_name="price", lookup_expr="gte")
+    price__lte = NumberFilter(field_name="price", lookup_expr="lte")
+
+    class Meta:
+        model = Product
+        fields = ["price"]
 
 
 @api_view(["POST"])
@@ -58,7 +68,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["price"]
+    filterset_class = ProductFilter
     search_fields = ["name", "description"]
 
     def get_permissions(self):
