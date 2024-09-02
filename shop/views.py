@@ -57,7 +57,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == "POST":
-            return [permissions.IsAdminUser()] # only admins can add new products
+            return [permissions.IsAdminUser()]  # only admins can add new products
         return []  # Publicly accessible for authenticated users
 
 
@@ -65,3 +65,13 @@ class ProductRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAdminUser]
+
+
+class OrderListCreateView(generics.ListCreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        if not self.request.user.is_superuser:
+            return self.queryset.filter(user=self.request.user)
+        return Order.objects.all()
