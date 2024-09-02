@@ -4,10 +4,11 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from rest_framework import permissions, status
+from rest_framework import permissions, status, generics
 from rest_framework.response import Response
 
 from .models import Product, Order, OrderItem
+from .serializers import ProductSerializer, OrderSerializer, OrderItemSerializer
 
 
 @api_view(["POST"])
@@ -48,3 +49,8 @@ class CustomLogin(ObtainAuthToken):
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
         return Response({"token": token.key})
+
+
+class ListProductsView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
