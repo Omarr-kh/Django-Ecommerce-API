@@ -51,6 +51,11 @@ class CustomLogin(ObtainAuthToken):
         return Response({"token": token.key})
 
 
-class ListProductsView(generics.ListAPIView):
+class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [permissions.IsAdminUser()] # only admins can add new products
+        return []  # Publicly accessible for authenticated users
