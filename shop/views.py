@@ -6,9 +6,11 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import permissions, status, generics
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 
-from .models import Product, Order, OrderItem
-from .serializers import ProductSerializer, OrderSerializer, OrderItemSerializer
+from .models import Product, Order
+from .serializers import ProductSerializer, OrderSerializer
+from .permissions import IsOwner
 
 
 @api_view(["POST"])
@@ -75,3 +77,23 @@ class OrderListCreateView(generics.ListCreateAPIView):
         if not self.request.user.is_superuser:
             return self.queryset.filter(user=self.request.user)
         return Order.objects.all()
+
+
+class OrderRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsOwner]
+
+    def update(self, request, *args, **kwargs):
+        order = self.get_object()
+
+        if order.status == "Completed":
+            raise ValidationError("Cannot update a completed Order")
+        return super().update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        order = self.get_object()
+
+        if order.status == "Completed":
+            raise ValidationError("Cannot delete a completed Order")
+        return super().delete(request, *args, **kwargs)
