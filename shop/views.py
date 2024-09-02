@@ -1,11 +1,11 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from 
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from rest_framework import permissions, status, generics
+from rest_framework import permissions, status, generics, filters
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 
@@ -57,6 +57,9 @@ class CustomLogin(ObtainAuthToken):
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ["price"]
+    search_fields = ["name", "description"]
 
     def get_permissions(self):
         if self.request.method == "POST":
