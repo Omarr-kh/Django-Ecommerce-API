@@ -59,3 +59,9 @@ class ProductListCreateView(generics.ListCreateAPIView):
         if self.request.method == "POST":
             return [permissions.IsAdminUser()] # only admins can add new products
         return []  # Publicly accessible for authenticated users
+
+
+class ProductRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAdminUser]
