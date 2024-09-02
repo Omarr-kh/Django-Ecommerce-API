@@ -8,132 +8,132 @@ from rest_framework.test import APITestCase
 from .models import Product, Order, OrderItem
 
 
-# class TestRegisterAPIs(APITestCase):
-#     def test_register(self) -> None:
-#         url = reverse("register-user")
-#         data = {
-#             "username": "Omar",
-#             "password": "apitesting123",
-#             "email": "omar@gmail.com",
-#         }
-#         response = self.client.post(url, data, format="json")
-#         user = User.objects.last()
+class TestRegisterAPIs(APITestCase):
+    def test_register(self) -> None:
+        url = reverse("register-user")
+        data = {
+            "username": "Omar",
+            "password": "apitesting123",
+            "email": "omar@gmail.com",
+        }
+        response = self.client.post(url, data, format="json")
+        user = User.objects.last()
 
-#         self.assertEqual(response.status_code, 201)
-#         self.assertEqual(User.objects.count(), 1)
-#         self.assertEqual(Token.objects.count(), 1)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(Token.objects.count(), 1)
 
-#         self.assertEqual(user.username, data["username"])
-#         self.assertEqual(user.email, data["email"])
+        self.assertEqual(user.username, data["username"])
+        self.assertEqual(user.email, data["email"])
 
-#     def test_register_existent_user(self) -> None:
-#         url = reverse("register-user")
-#         user1 = {
-#             "username": "Omar",
-#             "password": "apitesting123",
-#             "email": "omar@gmail.com",
-#         }
-#         user2 = {
-#             "username": "Omar",
-#             "password": "differentpass123",
-#             "email": "notomar@gmail.com",
-#         }
-#         response = self.client.post(url, user1, format="json")
-#         response2 = self.client.post(url, user2, format="json")
-#         user = User.objects.last()
+    def test_register_existent_user(self) -> None:
+        url = reverse("register-user")
+        user1 = {
+            "username": "Omar",
+            "password": "apitesting123",
+            "email": "omar@gmail.com",
+        }
+        user2 = {
+            "username": "Omar",
+            "password": "differentpass123",
+            "email": "notomar@gmail.com",
+        }
+        response = self.client.post(url, user1, format="json")
+        response2 = self.client.post(url, user2, format="json")
+        user = User.objects.last()
 
-#         self.assertEqual(response.status_code, 201)  # 1st time registering
-#         self.assertEqual(response2.status_code, 400)  # 2nd time registering
-#         self.assertEqual(User.objects.count(), 1)
-#         self.assertEqual(Token.objects.count(), 1)
+        self.assertEqual(response.status_code, 201)  # 1st time registering
+        self.assertEqual(response2.status_code, 400)  # 2nd time registering
+        self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(Token.objects.count(), 1)
 
-#         self.assertEqual(user.username, user1["username"])
-#         self.assertEqual(user.email, user1["email"])
+        self.assertEqual(user.username, user1["username"])
+        self.assertEqual(user.email, user1["email"])
 
-#     def test_register_missing_email(self) -> None:
-#         url = reverse("register-user")
-#         data = {
-#             "username": "Omar",
-#             "password": "apitesting123",
-#         }
-#         response = self.client.post(url, data, format="json")
+    def test_register_missing_email(self) -> None:
+        url = reverse("register-user")
+        data = {
+            "username": "Omar",
+            "password": "apitesting123",
+        }
+        response = self.client.post(url, data, format="json")
 
-#         self.assertEqual(response.status_code, 400)
-#         self.assertEqual(User.objects.count(), 0)
-#         self.assertEqual(Token.objects.count(), 0)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(User.objects.count(), 0)
+        self.assertEqual(Token.objects.count(), 0)
 
-#     def test_register_missing_username(self) -> None:
-#         url = reverse("register-user")
-#         data = {
-#             "email": "Omar@gmail.com",
-#             "password": "apitesting123",
-#         }
-#         response = self.client.post(url, data, format="json")
+    def test_register_missing_username(self) -> None:
+        url = reverse("register-user")
+        data = {
+            "email": "Omar@gmail.com",
+            "password": "apitesting123",
+        }
+        response = self.client.post(url, data, format="json")
 
-#         self.assertEqual(response.status_code, 400)
-#         self.assertEqual(User.objects.count(), 0)
-#         self.assertEqual(Token.objects.count(), 0)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(User.objects.count(), 0)
+        self.assertEqual(Token.objects.count(), 0)
 
-#     def test_register_missing_password(self) -> None:
-#         url = reverse("register-user")
-#         data = {
-#             "username": "Omar",
-#             "email": "Omar@gmail.com",
-#         }
-#         response = self.client.post(url, data, format="json")
+    def test_register_missing_password(self) -> None:
+        url = reverse("register-user")
+        data = {
+            "username": "Omar",
+            "email": "Omar@gmail.com",
+        }
+        response = self.client.post(url, data, format="json")
 
-#         self.assertEqual(response.status_code, 400)
-#         self.assertEqual(User.objects.count(), 0)
-#         self.assertEqual(Token.objects.count(), 0)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(User.objects.count(), 0)
+        self.assertEqual(Token.objects.count(), 0)
 
 
-# class TestLoginAPIs(APITestCase):
-#     def setUp(self) -> None:
-#         self.data = {
-#             "username": "omar",
-#             "password": "testing12345",
-#             "email": "omar@gmail.com",
-#         }
-#         self.login_url = reverse("login")
-#         self.register_url = reverse("register-user")
+class TestLoginAPIs(APITestCase):
+    def setUp(self) -> None:
+        self.data = {
+            "username": "omar",
+            "password": "testing12345",
+            "email": "omar@gmail.com",
+        }
+        self.login_url = reverse("login")
+        self.register_url = reverse("register-user")
 
-#     def test_login(self) -> None:
-#         self.client.post(self.register_url, self.data, format="json")
-#         token = Token.objects.last()
+    def test_login(self) -> None:
+        self.client.post(self.register_url, self.data, format="json")
+        token = Token.objects.last()
 
-#         login_cred = {
-#             "username": "omar",
-#             "password": "testing12345",
-#         }
-#         response = self.client.post(self.login_url, login_cred, format="json")
+        login_cred = {
+            "username": "omar",
+            "password": "testing12345",
+        }
+        response = self.client.post(self.login_url, login_cred, format="json")
 
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(token.key, response.data["token"])
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(token.key, response.data["token"])
 
-#     def test_login_missing_credentials(self) -> None:
-#         self.client.post(self.register_url, self.data, format="json")
-#         login_cred = {}
-#         response = self.client.post(self.login_url, login_cred, format="json")
+    def test_login_missing_credentials(self) -> None:
+        self.client.post(self.register_url, self.data, format="json")
+        login_cred = {}
+        response = self.client.post(self.login_url, login_cred, format="json")
 
-#         self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 400)
 
-#     def test_login_missing_username(self) -> None:
-#         self.client.post(self.register_url, self.data, format="json")
-#         login_cred = {
-#             "password": "testing12345",
-#         }
-#         response = self.client.post(self.login_url, login_cred, format="json")
+    def test_login_missing_username(self) -> None:
+        self.client.post(self.register_url, self.data, format="json")
+        login_cred = {
+            "password": "testing12345",
+        }
+        response = self.client.post(self.login_url, login_cred, format="json")
 
-#         self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 400)
 
-#     def test_login_missing_password(self) -> None:
-#         self.client.post(self.register_url, self.data, format="json")
-#         login_cred = {
-#             "username": "omar",
-#         }
-#         response = self.client.post(self.login_url, login_cred, format="json")
+    def test_login_missing_password(self) -> None:
+        self.client.post(self.register_url, self.data, format="json")
+        login_cred = {
+            "username": "omar",
+        }
+        response = self.client.post(self.login_url, login_cred, format="json")
 
-#         self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 400)
 
 
 class TestProductAPIs(APITestCase):
