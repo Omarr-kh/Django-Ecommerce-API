@@ -12,4 +12,5 @@ urlpatterns = [
         views.ProductRetrieveUpdateDestroyView.as_view(),
         name="update-delete-retrieve-products",
     ),
+    path("orders", views.OrderListCreateView.as_view(), name="list-create-orders"),
 ]
