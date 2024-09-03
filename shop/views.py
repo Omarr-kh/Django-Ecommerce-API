@@ -9,6 +9,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import permissions, status, generics, filters
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Product, Order
 from .serializers import ProductSerializer, OrderSerializer
@@ -64,12 +65,17 @@ class CustomLogin(ObtainAuthToken):
         return Response({"token": token.key})
 
 
+class ProductRetrieveUpdateDestroyPagination(PageNumberPagination):
+    page_size = 3
+
+
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ProductFilter
     search_fields = ["name", "description"]
+    pagination_class = pagination_class = ProductRetrieveUpdateDestroyPagination
 
     def get_permissions(self):
         if self.request.method == "POST":
